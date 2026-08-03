@@ -1,0 +1,1323 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title id="doc-title">Düşünce Sistemi · Postmodern Rulet</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+
+  <style>
+* { 
+  margin: 0; padding: 0; box-sizing: border-box; 
+  -webkit-tap-highlight-color: transparent; /* Mobilde tıklama titremelerini engeller */
+}
+input, select, textarea, button {
+  -webkit-appearance: none; appearance: none;
+}
+input:focus, select:focus, textarea:focus, button:focus,
+input:focus-visible, select:focus-visible, textarea:focus-visible, button:focus-visible {
+  outline: none !important;
+  box-shadow: none !important;
+}
+body { 
+  min-height: 100vh;
+  min-height: 100dvh; 
+  min-height: calc(var(--app-vh, 1vh) * 100);
+  background-color: #eef0f2; font-family: 'Outfit', sans-serif; 
+  overflow: hidden; color: #1a1a1a; 
+}
+
+#bg-wrapper {
+  position: fixed; inset: 0; width: 100%; height: 100%;
+  height: calc(var(--app-vh, 1vh) * 100);
+  z-index: 0; pointer-events: none;
+}
+#bg-wrapper > .shape {
+  position: absolute; background: rgba(255, 255, 255, 0.4); backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.6);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.03); transition: all 1500ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+#bg-wrapper > .shape:nth-child(1) { background-color: rgba(226, 232, 240, 0.4); z-index: 2; }
+#bg-wrapper > .shape:nth-child(2) { background-color: rgba(240, 244, 248, 0.5); z-index: 2; }
+#bg-wrapper > .shape:nth-child(3) { background-color: rgba(255, 255, 255, 0.6); z-index: 1; }
+#bg-wrapper > .shape:nth-child(4) { background-color: rgba(236, 239, 244, 0.5); z-index: 2; }
+#bg-wrapper > .shape:nth-child(5) { background-color: rgba(248, 250, 252, 0.4); z-index: 2; }
+#bg-wrapper > .shape:nth-child(6) { background-color: rgba(216, 226, 236, 0.3); z-index: 2; }
+#bg-wrapper > .shape:nth-child(7) { background-color: rgba(255, 255, 255, 0.7); z-index: 2; }
+
+#bg-wrapper[data-configuration="1"] > .shape:nth-child(1) { left: -5%; top: -5%; height: 50%; width: 30%; }
+#bg-wrapper[data-configuration="1"] > .shape:nth-child(2) { left: 20%; top: 10%; height: 40%; width: 40%; }
+#bg-wrapper[data-configuration="1"] > .shape:nth-child(3) { left: 50%; top: -10%; height: 80%; width: 60%; }
+#bg-wrapper[data-configuration="1"] > .shape:nth-child(4) { left: -10%; top: 60%; height: 50%; width: 40%; }
+#bg-wrapper[data-configuration="1"] > .shape:nth-child(5) { left: 30%; top: 50%; height: 60%; width: 30%; }
+#bg-wrapper[data-configuration="1"] > .shape:nth-child(6) { left: 65%; top: 50%; height: 60%; width: 45%; }
+#bg-wrapper[data-configuration="1"] > .shape:nth-child(7) { left: 80%; top: 75%; height: 35%; width: 25%; }
+#bg-wrapper[data-configuration="2"] > .shape:nth-child(1) { left: 20%; top: 20%; height: 70%; width: 25%; }
+#bg-wrapper[data-configuration="2"] > .shape:nth-child(2) { left: 40%; top: 10%; height: 60%; width: 15%; }
+#bg-wrapper[data-configuration="2"] > .shape:nth-child(3) { left: 60%; top: 0%; height: 100%; width: 40%; }
+#bg-wrapper[data-configuration="2"] > .shape:nth-child(4) { left: 5%; top: 10%; height: 50%; width: 20%; }
+#bg-wrapper[data-configuration="2"] > .shape:nth-child(5) { left: 0%; top: 60%; height: 40%; width: 35%; }
+#bg-wrapper[data-configuration="2"] > .shape:nth-child(6) { left: 70%; top: 10%; height: 80%; width: 25%; }
+#bg-wrapper[data-configuration="2"] > .shape:nth-child(7) { left: 85%; top: 50%; height: 60%; width: 20%; }
+#bg-wrapper[data-roundness="1"] > .shape { border-radius: 10rem; }
+#bg-wrapper[data-roundness="2"] > .shape { border-radius: 40rem; }
+#bg-wrapper[data-roundness="3"] > .shape { border-radius: 20rem 5rem 30rem 10rem; }
+
+.app-container {
+  position: relative; z-index: 10; width: 100%; height: 100dvh;
+  height: calc(var(--app-vh, 1vh) * 100);
+  max-width: 800px;
+  margin: 0 auto; display: flex; flex-direction: column; justify-content: space-between;
+  align-items: center; padding: 50px 20px; text-align: center;
+}
+.header { display: flex; flex-direction: column; align-items: center; gap: 15px; animation: fadeDown 0.8s ease forwards; width: 100%; }
+.app-title { font-family: 'Playfair Display', serif; font-size: 2.2rem; color: #1a1a1a; letter-spacing: -0.5px; }
+.app-title em { color: #7b8898; font-style: italic; }
+.badge {
+  font-size: 0.85rem; font-weight: 500; color: #555; background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(10px); padding: 8px 24px; border-radius: 50px; border: 1px solid rgba(255,255,255,1);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.03); letter-spacing: 0.5px;
+}
+
+.topic-section { flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%; gap: 14px; margin: 20px 0; min-height: 0; perspective: 700px; }
+.label { font-size: 0.85rem; font-weight: 600; letter-spacing: 6px; color: #929aab; text-transform: uppercase; min-height: 1.2em; transition: opacity 0.3s ease; }
+.label:empty { opacity: 0; }
+
+.topic-main { font-family: 'Playfair Display', serif; font-size: 3.5rem; line-height: 1.15; color: #111; font-weight: 600; text-shadow: 0 4px 20px rgba(255,255,255,0.8); min-height: 80px; display: flex; align-items: center; justify-content: center; transition: 0.2s; will-change: filter, transform, opacity; width: 100%; transform-style: preserve-3d; }
+
+@keyframes spinTick {
+  0%   { transform: translateY(-22px) rotateX(50deg); opacity: 0; filter: blur(5px); }
+  55%  { transform: translateY(4px) rotateX(-6deg); opacity: 1; filter: blur(0.5px); }
+  100% { transform: translateY(0) rotateX(0deg); opacity: 1; filter: blur(0); }
+}
+.topic-main.spin-tick { animation: spinTick 0.22s cubic-bezier(.22,1,.36,1); }
+.topic-sub { font-family: 'Playfair Display', serif; font-size: 1.3rem; font-style: italic; color: #666; min-height: 30px; }
+
+.idle-animated-wrap {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  width: 100%; gap: 0.5em;
+}
+.idle-eyebrow {
+  text-transform: uppercase;
+  letter-spacing: 0.45em;
+  font-family: 'Outfit', sans-serif;
+  font-weight: 600;
+  font-size: clamp(0.65rem, 2.2vw, 0.82rem);
+  color: #8a97a3;
+  padding-left: 0.45em;
+}
+.animated-span {
+  font-family: 'Oswald', sans-serif;
+  font-weight: 700;
+  font-size: clamp(2.6rem, 11.5vw, 4.6rem);
+  letter-spacing: 0.01em;
+  line-height: 1.05;
+  display: inline-block;
+  margin: 0 auto;
+  color: #0d9488;
+  background: linear-gradient(90deg,
+    #0f766e 0%, #14b8a6 18%, #2dd4bf 36%, #67e8f9 50%,
+    #2dd4bf 64%, #14b8a6 82%, #0f766e 100%);
+  background-size: 260% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 0 46px rgba(45, 212, 191, 0.35);
+  -webkit-animation: aitf 6s ease-in-out infinite;
+  animation: aitf 6s ease-in-out infinite;
+  -webkit-transform: translate3d(0,0,0);
+  -webkit-backface-visibility: hidden;
+  transition: opacity 0.35s ease, filter 0.35s ease, transform 0.35s ease;
+}
+.animated-span.word-swap {
+  opacity: 0;
+  filter: blur(10px);
+  transform: translateY(10px) scale(0.96);
+}
+
+@-webkit-keyframes aitf {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+@keyframes aitf {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.timer { font-size: 6rem; font-weight: 300; color: #111; letter-spacing: -3px; display: none; }
+.question { font-size: 1.25rem; color: #111; font-weight: 500; max-width: 600px; margin-top: 20px; line-height: 1.6; display: none; padding: 25px; background: rgba(255,255,255,0.6); backdrop-filter: blur(10px); border-radius: 20px; border: 1px solid #fff; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
+.question .q-eyebrow { display: block; font-size: 0.7rem; letter-spacing: 3px; text-transform: uppercase; color: #9aa3b2; margin-bottom: 10px; font-family: 'Outfit', sans-serif; font-weight: 700; }
+
+.action-section { display: flex; flex-direction: column; align-items: center; width: 100%; gap: 20px; animation: fadeUp 0.8s ease forwards; margin-bottom: 20px;}
+
+.btn {
+  --gel-x: 50%; --gel-y: 50%;
+  background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,1);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.06), inset 0 0 10px rgba(255,255,255,1); position: relative; cursor: pointer;
+  padding: 1.3em 4em; border-radius: 100px; overflow: hidden; transition: all 0.35s cubic-bezier(.22,1,.36,1); min-width: 320px; outline: none;
+  isolation: isolate;
+  -webkit-appearance: none;
+}
+.btn:hover { transform: translateY(-2px); box-shadow: 0 15px 35px rgba(0,0,0,0.09); background: #ffffff; }
+.btn:active { transform: translateY(1px) scale(0.99); }
+.btn.active { background: #f0f4f8; pointer-events: none;}
+.btn span.label-text { font-family: 'Outfit', sans-serif; font-size: 1.15rem; letter-spacing: 1px; position: relative; z-index: 200; color: #111; font-weight: 700; pointer-events: none; }
+.btn canvas { z-index: 100; position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; }
+
+.btn.iridescent::before {
+  content: ""; position: absolute; inset: -70%; z-index: 1; pointer-events: none;
+  background: conic-gradient(from 0deg, #ffb3c6, #ffe3a3, #a8e6cf, #a3d8f4, #c9b6f7, #ffb3c6);
+  filter: blur(34px) saturate(180%); opacity: 0.28; mix-blend-mode: overlay;
+  animation: iridescent-spin 9s linear infinite;
+  transition: opacity 0.4s ease;
+}
+.btn.iridescent:hover::before { opacity: 0.5; animation-duration: 5s; }
+.btn.iridescent .drop-shadow {
+  position: absolute; inset: 0; z-index: 2; border-radius: inherit; pointer-events: none;
+  box-shadow: inset 0 1px 1px rgba(255,255,255,0.95), inset 0 -8px 18px rgba(0,0,0,0.05), inset 0 0 0 1px rgba(255,255,255,0.4);
+}
+@keyframes iridescent-spin { to { transform: rotate(360deg); } }
+
+.btn::after, .btn-ghost::after {
+  content: ""; position: absolute; inset: 0; z-index: 3; pointer-events: none; opacity: 0;
+  border-radius: inherit; transition: opacity 0.4s ease;
+  background: radial-gradient( 140px circle at var(--gel-x, 50%) var(--gel-y, 50%), oklch(0.97 0.015 245 / 0.65), oklch(0.85 0.04 250 / 0.35) 45%, oklch(0.7 0.05 255 / 0) 72%);
+  mix-blend-mode: overlay;
+}
+.btn:hover::after, .btn-ghost:hover::after { opacity: 1; }
+
+.secondary-actions { display: flex; gap: 15px; width: 100%; max-width: 450px; justify-content: center; transition: all 0.3s ease; }
+.btn-ghost {
+  --gel-x: 50%; --gel-y: 50%;
+  flex: 1; padding: 15px 0; background: rgba(255, 255, 255, 0.4); border: 1px solid rgba(0,0,0,0.05); border-radius: 50px; color: #444; font-family: 'Outfit', sans-serif; font-weight: 500; font-size: 1rem; cursor: pointer; backdrop-filter: blur(5px); transition: all 0.25s ease; outline: none; position: relative; overflow: hidden; isolation: isolate;
+  -webkit-appearance: none;
+}
+.btn-ghost:hover { background: rgba(255, 255, 255, 0.85); color: #000; border-color: rgba(0,0,0,0.1); transform: translateY(-1px); }
+.btn-ghost:active { transform: translateY(0) scale(0.98); }
+.btn-ghost span { position: relative; z-index: 5; }
+
+.footer-text { font-size: 0.9rem; color: #666; font-weight: 300; margin-top: 10px; min-height: 20px;}
+
+.evo-credit { position: fixed; bottom: 15px; left: 50%; transform: translateX(-50%); font-family: 'Outfit', sans-serif; font-size: 0.75rem; color: rgba(0,0,0,0.4); letter-spacing: 2px; text-transform: uppercase; z-index: 50; cursor: default; text-decoration: none; pointer-events: none; }
+.evo-credit span { font-weight: 700; color: #1a1a1a; letter-spacing: 3px;}
+
+.settings-btn, .lang-quick { position: fixed; bottom: 30px; height: 45px; background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(10px); border: 1px solid #fff; display: flex; justify-content: center; align-items: center; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.05); z-index: 50; transition: all 0.2s; -webkit-appearance: none; outline: none;}
+.settings-btn { right: 30px; width: 45px; border-radius: 50%; }
+.settings-btn:hover { background: #fff; transform: rotate(45deg); }
+.lang-quick { left: 30px; padding: 0 20px; border-radius: 50px; font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 0.8rem; letter-spacing: 1px; color: #333; }
+.lang-quick:hover { background: #fff; transform: translateY(-2px); }
+
+.modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.15); backdrop-filter: blur(5px); z-index: 999; display: flex; justify-content: center; align-items: center; opacity: 0; pointer-events: none; transition: 0.3s ease; }
+.modal-overlay.show { opacity: 1; pointer-events: auto; }
+.modal-content { background: rgba(255,255,255,0.85); backdrop-filter: blur(25px); border: 1px solid #fff; padding: 30px; border-radius: 24px; width: 90%; max-width: 350px; max-height: 85vh; overflow-y: auto; box-shadow: 0 20px 50px rgba(0,0,0,0.1); transform: translateY(20px); transition: 0.3s ease; display: flex; flex-direction: column; gap: 20px; }
+.modal-overlay.show .modal-content { transform: translateY(0); }
+.modal-title { font-size: 1.5rem; font-weight: 600; color: #111; }
+.input-group { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; text-align: left; width: 100%;}
+.input-group label { font-size: 0.9rem; color: #555; font-weight: 500; }
+
+.input-group input,
+.input-group select {
+  width: 100%; padding: 12px 14px; border-radius: 12px;
+  border: 1px solid rgba(0,0,0,0.1); background: rgba(255,255,255,0.7);
+  font-family: 'Outfit', sans-serif; font-size: 1rem; color: #1a1a1a;
+  -webkit-appearance: none; -moz-appearance: none; appearance: none;
+  outline: none !important; box-shadow: none !important;
+  caret-color: #318CFE; transition: 0.2s;
+}
+.input-group input:focus,
+.input-group select:focus {
+  outline: none !important; box-shadow: none !important;
+  border-color: rgba(49, 140, 254, 0.5);
+  background: #fff;
+}
+.input-group input[type="number"] { -moz-appearance: textfield; }
+.input-group input[type="number"]::-webkit-inner-spin-button,
+.input-group input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none; margin: 0;
+}
+.input-group input:-webkit-autofill,
+.input-group input:-webkit-autofill:hover,
+.input-group input:-webkit-autofill:focus {
+  -webkit-text-fill-color: #1a1a1a;
+  -webkit-box-shadow: 0 0 0px 1000px rgba(255,255,255,0.9) inset;
+  transition: background-color 9999s ease-in-out 0s;
+}
+.input-group select {
+  cursor: pointer;
+  padding-right: 36px;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23555' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'></polyline></svg>");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 18px;
+}
+.input-hint { font-size: 0.78rem; color: #888; font-weight: 300; margin-top: -4px; }
+
+.modal-close { background: #111; color: #fff; border: none; padding: 14px; border-radius: 12px; font-weight: 500; font-size: 1rem; cursor: pointer; transition: 0.2s; font-family: 'Outfit', sans-serif; outline: none; -webkit-appearance: none;}
+.modal-close:hover { background: #333; }
+
+.lang-toggle { display: flex; background: rgba(0,0,0,0.05); border-radius: 12px; padding: 4px; gap: 4px; width: 100%; }
+.lang-btn { flex: 1; padding: 10px 0; border: none; background: transparent; border-radius: 8px; font-family: 'Outfit', sans-serif; font-weight: 600; font-size: 0.9rem; color: #666; cursor: pointer; transition: 0.2s; outline: none; -webkit-appearance: none;}
+.lang-btn.active { background: #111; color: #fff; }
+.lang-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+/* Flash Efekti */
+.flash-overlay { position: fixed; inset: 0; background: radial-gradient(circle at 50% 45%, rgba(255,255,255,0.95), rgba(210,225,255,0.35)); z-index: 900; opacity: 0; pointer-events: none; }
+.flash-anim { animation: flashScreen 0.45s ease-out; }
+
+.toast {
+  position: fixed; top: max(20px, env(safe-area-inset-top)); left: 50%; transform: translateX(-50%) translateY(-15px);
+  background: rgba(20, 20, 20, 0.92); color: #fff; padding: 8px 16px; border-radius: 50px;
+  font-family: 'Outfit', sans-serif; font-size: 0.78rem; font-weight: 500; letter-spacing: 0.2px; opacity: 0; pointer-events: none;
+  transition: all 0.35s ease; z-index: 950; backdrop-filter: blur(10px); box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+  max-width: 80vw; width: max-content; white-space: nowrap; text-align: center;
+}
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+.hidden { display: none !important; }
+@keyframes fadeDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes flashScreen { 0% {opacity: 1;} 100% {opacity: 0;} }
+
+.reveal { animation: revealFocus 0.9s cubic-bezier(.22,1,.36,1) forwards; }
+@keyframes revealFocus { from { opacity: 0; filter: blur(14px); transform: translateY(8px) scale(1.035); } to { opacity: 1; filter: blur(0); transform: translateY(0) scale(1); } }
+.reveal-soft { animation: revealSoft 0.6s cubic-bezier(.22,1,.36,1) forwards; }
+@keyframes revealSoft { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+.evo-blob-link { position: fixed; top: 20px; left: 20px; bottom: auto; z-index: 55; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; text-decoration: none; cursor: pointer; outline: none; -webkit-tap-highlight-color: transparent;}
+.evo-blob-link .evo-drop { position: absolute; inset: 2px; background: #54ABFB; border-radius: 51% 49% 48% 52% / 62% 44% 56% 38%; opacity: 0.85; border: 1px solid #3d93ff; animation: evoBlobFloat 4.2s ease-in-out infinite; transition: transform 0.3s cubic-bezier(.22,1,.36,1); }
+.evo-blob-link .evo-drop::before { content: ""; position: absolute; inset: 0; background: #318CFE; border-radius: inherit; box-shadow: -6px 8px 6px #1B6CFB, inset -3px 3px 5px #1B6CFB, inset 1px 3px 5px #1a74e5, inset 8px -8px 10px #ffffff, inset 16px -16px 18px #a8ceff; }
+.evo-blob-link .evo-dot { position: absolute; height: 9px; width: 9px; background: #E6FDFB; border-radius: 44% 56% 46% 54% / 36% 50% 50% 64%; left: 24px; top: 9px; opacity: 0.85; z-index: 2; }
+.evo-blob-link:hover .evo-drop { transform: scale(1.12); animation-play-state: paused; }
+@keyframes evoBlobFloat { 0%, 100% { transform: translateY(0) rotate(0deg); } 50% { transform: translateY(-5px) rotate(6deg); } }
+
+
+
+@media (max-width: 640px) {
+  html, body { height: calc(var(--app-vh, 1vh) * 100); overflow: hidden; }
+
+  .app-container {
+    height: calc(var(--app-vh, 1vh) * 100);
+    padding: max(18px, env(safe-area-inset-top)) 16px calc(14px + env(safe-area-inset-bottom));
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    justify-content: center;
+    gap: 10px;
+  }
+  .header { gap: 6px; margin: 0; }
+  .app-title { font-size: clamp(1.35rem, 5.5vw, 1.7rem); }
+  .badge { font-size: 0.68rem; padding: 6px 14px; width: 100%; max-width: 300px; white-space: nowrap; margin: 0 auto; }
+
+  .topic-section { min-height: 0; margin: 0; overflow: hidden; gap: 10px; }
+  .topic-main { font-size: clamp(1.7rem, 8vw, 2.3rem); min-height: 0; line-height: 1.2; word-break: break-word; }
+  .topic-sub { font-size: 1rem; min-height: 0; }
+  .timer { font-size: clamp(2.8rem, 16vw, 4rem); letter-spacing: -2px; }
+  .question { font-size: 0.92rem; padding: 14px 16px; max-width: 100%; line-height: 1.5; }
+
+  .action-section { margin: 0; gap: 12px; }
+  .btn { padding: 1em 1em; min-width: unset; width: 100%; max-width: 100%; }
+  .btn span.label-text { font-size: 0.92rem; letter-spacing: 0.5px; }
+  .secondary-actions { max-width: 100%; gap: 8px; }
+  .btn-ghost { font-size: 0.82rem; padding: 11px 0; }
+  .footer-text { display: none; }
+
+  .settings-btn { right: 14px; bottom: max(14px, env(safe-area-inset-bottom)); width: 40px; height: 40px; }
+  .lang-quick { left: 14px; bottom: max(14px, env(safe-area-inset-bottom)); height: 40px; padding: 0 12px; font-size: 0.72rem; }
+  .evo-blob-link { top: max(14px, env(safe-area-inset-top)); left: 14px; bottom: auto; width: 34px; height: 34px; }
+  .evo-blob-link .evo-dot { left: 18px; top: 6px; height: 6px; width: 6px; }
+  .evo-credit { font-size: 0.6rem; bottom: max(8px, env(safe-area-inset-bottom)); }
+
+  .modal-content { padding: 22px; width: 92%; max-width: 100%; max-height: 80vh; max-height: calc(var(--app-vh, 1vh) * 80); }
+  .toast { top: max(14px, env(safe-area-inset-top)); padding: 7px 14px; font-size: 0.72rem; max-width: 90vw; }
+
+  .idle-eyebrow { font-size: clamp(0.55rem, 3vw, 0.7rem); letter-spacing: 0.3em; }
+  .animated-span { font-size: clamp(2rem, 13vw, 3rem); }
+}
+
+@media (max-width: 360px) {
+  .topic-main { font-size: 1.7rem; }
+  .app-title { font-size: 1.3rem; }
+  .badge { font-size: 0.6rem; }
+  .animated-span { font-size: clamp(1.7rem, 12vw, 2.4rem); }
+}
+
+@media (max-height: 680px) and (max-width: 640px) {
+  .app-container { gap: 6px; }
+  .topic-main { font-size: clamp(1.5rem, 7vw, 1.9rem); }
+  .animated-span { font-size: clamp(1.7rem, 11vw, 2.4rem); }
+}
+
+@media (max-height: 480px) and (orientation: landscape) {
+  .app-container { grid-template-rows: auto 1fr auto; padding-top: 10px; padding-bottom: 10px; gap: 4px; }
+  .header { gap: 2px; }
+  .app-title { font-size: 1.2rem; }
+  .badge { display: none; }
+  .topic-main { font-size: 1.5rem; }
+  .idle-eyebrow { display: none; }
+  .animated-span { font-size: 1.6rem; }
+  .btn { padding: 0.7em 1em; }
+  .footer-text { display: none; }
+}
+
+@media (hover: none) {
+  .btn::after, .btn-ghost::after { display: none; }
+}
+  </style>
+</head>
+<body>
+
+  <div class="flash-overlay" id="flash"></div>
+
+  <div id="bg-wrapper" data-configuration="1" data-roundness="1">
+    <div class="shape"></div><div class="shape"></div><div class="shape"></div>
+    <div class="shape"></div><div class="shape"></div><div class="shape"></div><div class="shape"></div>
+  </div>
+
+  <main class="app-container">
+    <header class="header">
+      <h1 class="app-title" id="app-title">Düşünce <em>Sistemi</em></h1>
+      <div class="badge" id="badge-text">Bir konu çevir · <span id="badge-time">15</span> dk araştır · <span id="badge-talk">2</span> dk konuş</div>
+    </header>
+
+    <section class="topic-section">
+      <div class="label" id="top-label"></div>
+      <h2 id="topic-main" class="topic-main">Zihnine Meydan Oku</h2>
+      <p id="topic-sub" class="topic-sub"> </p>
+
+      <div id="timer-display" class="timer">15:00</div>
+      <div id="question-display" class="question"></div>
+    </section>
+
+    <section class="action-section">
+      <button class="btn iridescent" id="btn-primary">
+        <span class="label-text" id="btn-primary-text">BİR KONU ÜRET</span>
+        <span class="drop-shadow"></span>
+        <canvas id="canvas"></canvas>
+      </button>
+
+      <div id="secondary-actions" class="secondary-actions hidden">
+        <button class="btn-ghost" id="btn-respin"><span id="txt-respin">Yeniden Çevir</span></button>
+        <button class="btn-ghost" id="btn-reset"><span id="txt-reset">Baştan Başla</span></button>
+      </div>
+
+      <p class="footer-text" id="footer-text">Ayakları üzerinde düşünmek isteyenler için.</p>
+    </section>
+  </main>
+
+  <div class="lang-quick" id="lang-quick">TR</div>
+
+  <div class="settings-btn" id="settings-open" aria-label="Ayarlar">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="3"></circle>
+      <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+    </svg>
+  </div>
+
+  <a class="evo-blob-link" href="https://evo-tm.github.io/Portfoy/" target="_blank" rel="noopener noreferrer" title="Portfolyomu ziyaret et" aria-label="Portfolyomu ziyaret et">
+    <span class="evo-drop"></span>
+    <span class="evo-dot"></span>
+  </a>
+
+  <span class="evo-credit">Developed by <span>EVO</span></span>
+
+  <div class="toast" id="toast"></div>
+
+  <div class="modal-overlay" id="settings-modal">
+    <div class="modal-content">
+      <h3 class="modal-title" id="settings-title">Sistem Ayarları</h3>
+
+      <div class="input-group">
+        <label id="lbl-lang">Dil</label>
+        <div class="lang-toggle" id="lang-toggle">
+          <button type="button" class="lang-btn active" data-lang="tr">TR</button>
+          <button type="button" class="lang-btn" data-lang="en">EN</button>
+        </div>
+      </div>
+
+      <div class="input-group">
+        <label id="lbl-research">Araştırma Süresi (Dakika)</label>
+        <input type="number" id="setting-time" value="15" min="1" max="120">
+      </div>
+      <div class="input-group">
+        <label id="lbl-talk">Konuşma Süresi (Dakika)</label>
+        <input type="number" id="setting-talk" value="2" min="1" max="30">
+      </div>
+      <div class="input-group">
+        <label id="lbl-category">Tercih Edilen Kategori</label>
+        <select id="setting-category"></select>
+        <span class="input-hint" id="lbl-category-hint">Her çevirişte bu alandan bir konu üretilir.</span>
+      </div>
+      <button class="modal-close" id="settings-close">Kaydet ve Devam Et</button>
+    </div>
+  </div>
+
+  <script>
+(function () {
+  "use strict";
+
+  /* =========================================================
+     GROQ API ANAHTARI
+     ---------------------------------------------------------
+     Aşağıdaki tırnakların İÇİNE kendi Groq API anahtarını yapıştır.
+     console.groq.com adresinden ücretsiz bir anahtar alabilirsin.
+     Anahtar boş kalırsa uygulama sessizce sabit (fallback) konu
+     havuzunu kullanır, hiçbir hata vermez.
+
+     NOT: Bu dosya tek başına (sunucusuz) çalıştığı için anahtar
+     tarayıcı tarafında görünür durumdadır. Herkese açık bir siteye
+     yüklemeyeceksen (kendi bilgisayarında kullanacaksan) sorun
+     olmaz; halka açık bir adrese koyacaksan başkaları da bu anahtarı
+     görüp kullanabilir, ona göre bir kotalı/ücretsiz anahtar kullan.
+  ========================================================= */
+  const GROQ_API_KEY = "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";
+
+  const GROQ_URL = "https://api.groq.com/openai/v1/chat/completions";
+
+  const CATEGORIES = [
+    { key: 'rastgele',            tr: 'Sürpriz Beni (Karma)',              en: 'Surprise Me (Mixed)',                 promptTr: null,                             promptEn: null },
+    { key: 'felsefe',             tr: 'Felsefe',                            en: 'Philosophy',                          promptTr: 'felsefe',                        promptEn: 'philosophy' },
+    { key: 'teknoloji_etik',      tr: 'Teknoloji & Etik',                   en: 'Technology & Ethics',                 promptTr: 'teknoloji etiği',                promptEn: 'technology ethics' },
+    { key: 'toplum_sosyoloji',    tr: 'Toplum & Sosyoloji',                 en: 'Society & Sociology',                 promptTr: 'toplum ve sosyoloji',            promptEn: 'society and sociology' },
+    { key: 'psikoloji_zihin',     tr: 'Psikoloji & Zihin',                  en: 'Psychology & Mind',                   promptTr: 'psikoloji ve zihin felsefesi',   promptEn: 'psychology and philosophy of mind' },
+    { key: 'siyaset_felsefesi',   tr: 'Siyaset Felsefesi',                  en: 'Political Philosophy',                promptTr: 'siyaset felsefesi',              promptEn: 'political philosophy' },
+    { key: 'sanat_estetik',       tr: 'Sanat & Estetik',                    en: 'Art & Aesthetics',                    promptTr: 'sanat ve estetik',               promptEn: 'art and aesthetics' },
+    { key: 'bilim_epistemoloji',  tr: 'Bilim Tarihi & Epistemoloji',        en: 'History of Science & Epistemology',   promptTr: 'bilim tarihi ve epistemoloji',   promptEn: 'history of science and epistemology' }
+  ];
+
+  const I18N = {
+    tr: {
+      docTitle: "Düşünce Sistemi · Postmodern Rulet",
+      appNameHtml: "Düşünce <em>Sistemi</em>",
+      badgePrefix: "Bir konu çevir",
+      badgeResearch: (n) => `${n} dk araştır`,
+      badgeTalk: (n) => `${n} dk konuş`,
+      idleTopic: "Zihnine Meydan Oku",
+      footerIdle: "Ayakları üzerinde düşünmek isteyenler için.",
+      btnGenerate: "BİR KONU ÜRET",
+      labelSpinning: "KONUN SEÇİLİYOR",
+      btnSpinning: "SEÇİLİYOR...",
+      footerSpinning: "",
+      labelReady: "",
+      btnResearch: "ARAŞTIRMAYA BAŞLA",
+      footerReady: (n) => `Bu konuyu araştırmak ve not almak için ${n} dakikan var.`,
+      respin: "Yeniden Çevir",
+      reset: "Baştan Başla",
+      labelResearch: "ARAŞTIRMA SÜRECİ",
+      btnSkipResearch: "TARTIŞMAYA GEÇ (SÜREYİ ATLA)",
+      footerResearch: "Notlarını çıkar, argümanını inşa et.",
+      labelTalk: "SÖZ SIRASI SENDE",
+      btnFinish: "OTURUMU BİTİR",
+      footerTalk: "Kameraya, mikrofonuna veya karşındaki kişiye hitap et.",
+      questionEyebrow: "Sana Soru",
+      labelDone: "SONUÇ",
+      doneTopic: "Oturum Tamamlandı.",
+      doneSub: "Zihnini geliştirmeye devam et.",
+      footerDone: "Hazır hissettiğinde döngüyü yeniden başlat.",
+      btnNewTopic: "YENİ BİR KONU ÜRET",
+      settingsTitle: "Sistem Ayarları",
+      settingsLang: "Dil",
+      settingsResearch: "Araştırma Süresi (Dakika)",
+      settingsTalk: "Konuşma Süresi (Dakika)",
+      settingsCategory: "Tercih Edilen Kategori",
+      settingsCategoryHint: "Her çevirişte bu alandan bir konu üretilir.",
+      settingsSave: "Kaydet ve Devam Et",
+      toastLang: "Türkçe",
+      toastLangLockedSpin: "Dönerken değişmez",
+      toastLangResetSession: "Dil değişti · sıfırlandı",
+      spinWords: ["Kuantum Bilinci","Simülasyon Argümanı","Nöro-Kapitalizm","Evrensel Temel Gelir","Transhümanizm & Etik","Dijital Mahremiyet","Postmodern Nihilizm","Kozmik İzolasyon","Algoritmik Adalet","Hafızanın Politikası","Sanal Kimlik Krizi","Zamanın Fenomenolojisi"],
+      idlePrefix: "Zihnine meydan oku",
+      idleWords: ["FELSEFE","BİLİM","SANAT","BİLİŞİM","PSİKOLOJİ","SİYASET"]
+    },
+    en: {
+      docTitle: "Thought App · Postmodern Roulette",
+      appNameHtml: "Thought <em>App</em>",
+      badgePrefix: "Spin a topic",
+      badgeResearch: (n) => `${n} min research`,
+      badgeTalk: (n) => `${n} min talk`,
+      idleTopic: "Challenge Your Mind",
+      footerIdle: "For those who like thinking on their feet.",
+      btnGenerate: "SPIN A TOPIC",
+      labelSpinning: "SELECTING YOUR TOPIC",
+      btnSpinning: "SELECTING...",
+      footerSpinning: "",
+      labelReady: "",
+      btnResearch: "START RESEARCHING",
+      footerReady: (n) => `You have ${n} minutes to research and take notes.`,
+      respin: "Spin Again",
+      reset: "Start Over",
+      labelResearch: "RESEARCH TIME",
+      btnSkipResearch: "GO TO DISCUSSION (SKIP TIME)",
+      footerResearch: "Take notes, build your argument.",
+      labelTalk: "YOUR TURN TO SPEAK",
+      btnFinish: "END SESSION",
+      footerTalk: "Speak to the camera, mic, or the person across from you.",
+      questionEyebrow: "Your Question",
+      labelDone: "DONE",
+      doneTopic: "Session Complete.",
+      doneSub: "Keep sharpening your mind.",
+      footerDone: "Start the cycle again whenever you're ready.",
+      btnNewTopic: "GENERATE A NEW TOPIC",
+      settingsTitle: "System Settings",
+      settingsLang: "Language",
+      settingsResearch: "Research Time (Minutes)",
+      settingsTalk: "Talk Time (Minutes)",
+      settingsCategory: "Preferred Category",
+      settingsCategoryHint: "Each spin generates a topic from this field.",
+      settingsSave: "Save & Continue",
+      toastLang: "English",
+      toastLangLockedSpin: "Locked while spinning",
+      toastLangResetSession: "Language changed · reset",
+      spinWords: ["Quantum Consciousness","The Simulation Argument","Neuro-Capitalism","Universal Basic Income","Transhumanism & Ethics","The Death of Digital Privacy","Postmodern Nihilism","Cosmic Isolation","Algorithmic Justice","The Politics of Memory","Virtual Identity Crisis","The Phenomenology of Time"],
+      idlePrefix: "Challenge your mind",
+      idleWords: ["PHILOSOPHY","SCIENCE","ART","TECH","PSYCHOLOGY","POLITICS"]
+    }
+  };
+
+  let currentLang = 'tr';
+  const t = () => I18N[currentLang];
+
+  const setAppVh = () => {
+    document.documentElement.style.setProperty('--app-vh', `${window.innerHeight * 0.01}px`);
+  };
+  setAppVh();
+  let vhResizeTimer = null;
+  let lastVhWidth = window.innerWidth;
+  window.addEventListener('resize', () => {
+    if (window.innerWidth === lastVhWidth) return;
+    lastVhWidth = window.innerWidth;
+    clearTimeout(vhResizeTimer);
+    vhResizeTimer = setTimeout(setAppVh, 150);
+  });
+  window.addEventListener('orientationchange', () => {
+    clearTimeout(vhResizeTimer);
+    vhResizeTimer = setTimeout(setAppVh, 250);
+  });
+
+  let audioCtx = null;
+  const getAudioCtx = () => {
+    try {
+      if (!audioCtx) {
+        const Ctx = window.AudioContext || window.webkitAudioContext;
+        if (!Ctx) return null;
+        audioCtx = new Ctx();
+      }
+      if (audioCtx.state === 'suspended') audioCtx.resume().catch(() => {});
+      return audioCtx;
+    } catch (e) {
+      return null;
+    }
+  };
+
+  const playTone = (type) => {
+    try {
+      const ctx = getAudioCtx();
+      if (!ctx) return; 
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      const now = ctx.currentTime;
+
+      if (type === 'click') {
+        osc.type = 'square'; osc.frequency.setValueAtTime(450, now);
+        osc.frequency.exponentialRampToValueAtTime(100, now + 0.05);
+        gain.gain.setValueAtTime(0.04, now); gain.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
+        osc.start(now); osc.stop(now + 0.05);
+        if (navigator.vibrate) navigator.vibrate(15);
+      }
+      else if (type === 'tick') {
+        osc.type = 'triangle'; osc.frequency.setValueAtTime(800, now);
+        gain.gain.setValueAtTime(0.015, now); gain.gain.exponentialRampToValueAtTime(0.001, now + 0.03);
+        osc.start(now); osc.stop(now + 0.03);
+        if (navigator.vibrate) navigator.vibrate(5);
+      }
+      else if (type === 'success') {
+        osc.type = 'sine'; osc.frequency.setValueAtTime(523.25, now);
+        osc.frequency.setValueAtTime(659.25, now + 0.1);
+        gain.gain.setValueAtTime(0, now); gain.gain.linearRampToValueAtTime(0.1, now + 0.05);
+        gain.gain.linearRampToValueAtTime(0, now + 0.4);
+        osc.start(now); osc.stop(now + 0.4);
+        if (navigator.vibrate) navigator.vibrate([80, 40, 100]);
+      }
+      else if (type === 'alert') {
+        osc.type = 'sawtooth'; osc.frequency.setValueAtTime(800, now);
+        gain.gain.setValueAtTime(0.05, now); gain.gain.exponentialRampToValueAtTime(0.001, now + 0.6);
+        osc.start(now); osc.stop(now + 0.6);
+        if (navigator.vibrate) navigator.vibrate([200, 100, 200]);
+      }
+    } catch (e) {
+    }
+  };
+
+  const bgWrapper = document.getElementById("bg-wrapper");
+  const bgCombos = [
+    { conf: 1, round: 1 }, { conf: 1, round: 2 }, { conf: 1, round: 3 },
+    { conf: 2, round: 2 }, { conf: 2, round: 1 }, { conf: 2, round: 3 }
+  ];
+  let prevConf = 0;
+  setInterval(() => {
+    let next = prevConf;
+    while (prevConf === next) next = Math.floor(Math.random() * bgCombos.length);
+    bgWrapper.dataset.configuration = bgCombos[next].conf;
+    bgWrapper.dataset.roundness = bgCombos[next].round;
+    prevConf = next;
+  }, 4500);
+
+  const CANVAS = document.querySelector("#canvas");
+  const btnEl = document.querySelector(".btn");
+  const ctx = CANVAS.getContext("2d");
+  const PARTICLES = [];
+  let W, H, XO, YO = 0; let isGoing = false;
+
+  class Particle {
+    constructor() { this.reset(); this.z = Math.random() * 2; }
+    reset() { this.x = Math.random() * W - XO; this.y = Math.random() * H - YO; this.z = 2; }
+    update() { this.z -= 0.02; if (this.z <= 0) this.reset(); }
+    render() {
+      this.update();
+      const px = (this.x / this.z) + XO; const py = (this.y / this.z) + YO;
+      const r = Math.max(0, (2 - this.z) * 1.5);
+      ctx.beginPath(); ctx.fillStyle = "rgba(0,0,0,0.3)"; ctx.arc(px, py, r, 0, Math.PI * 2); ctx.fill();
+    }
+  }
+
+  const initCanvas = () => {
+    CANVAS.width = W = btnEl.offsetWidth; CANVAS.height = H = btnEl.offsetHeight;
+    XO = W / 2; YO = H / 2;
+    if (PARTICLES.length === 0) for (let i = 0; i < 40; i++) PARTICLES.push(new Particle());
+  };
+
+  function loop() {
+    requestAnimationFrame(loop);
+    if (isGoing) {
+      ctx.fillStyle = "rgba(255, 255, 255, 0.4)"; ctx.fillRect(0, 0, W, H);
+      PARTICLES.forEach(p => p.render());
+    } else { ctx.clearRect(0, 0, W, H); }
+  }
+  if (window.ResizeObserver) {
+    new ResizeObserver(initCanvas).observe(btnEl);
+  } else {
+    window.addEventListener('resize', initCanvas);
+  }
+  initCanvas(); loop();
+
+  const gelTargets = document.querySelectorAll('.btn, .btn-ghost');
+  gelTargets.forEach((el) => {
+    el.addEventListener('mousemove', (ev) => {
+      const rect = el.getBoundingClientRect();
+      const x = ((ev.clientX - rect.left) / rect.width) * 100;
+      const y = ((ev.clientY - rect.top) / rect.height) * 100;
+      el.style.setProperty('--gel-x', `${x}%`);
+      el.style.setProperty('--gel-y', `${y}%`);
+    });
+    el.addEventListener('mouseleave', () => {
+      el.style.setProperty('--gel-x', `50%`);
+      el.style.setProperty('--gel-y', `50%`);
+    });
+  });
+
+  const AI_MODEL = "openai/gpt-oss-20b";
+  const MIN_SPIN_MS = 5000;             
+  const REQUEST_TIMEOUT_MS = 7000;
+  const MAX_ATTEMPTS = 3;
+  const REQUEST_WINDOW_MS = 60000;       
+  const MAX_REQUESTS_PER_WINDOW = 8;    
+
+  // Anahtar boş / yer tutucu olduğu sürece hiç canlı istek denenmez,
+  // doğrudan sabit havuza düşülür (konsolda gereksiz hata birikmez).
+  const hasApiKey = () => !!GROQ_API_KEY && GROQ_API_KEY.indexOf("BURAYA_") !== 0;
+
+  const FALLBACK_TOPICS = {
+    tr: [
+      { topic: "Simülasyon Hipotezi", sub: "The Simulation Argument", questions: [
+        "Bu konuyu hiç bilmeyen birine 2 dakikada nasıl özetlersin?", "Karşıt görüşlü biri neleri savunurdu?",
+        "Bu fikrin gündelik hayatımızdaki pratik bir sonucu olur muydu?", "En güçlü karşı-argüman sence nedir?",
+        "Bu konu 50 yıl sonra nasıl tartışılır olurdu?" ] },
+      { topic: "Dijital İkiz Benlik", sub: "The Algorithmic Self", questions: [
+        "Sosyal medyadaki 'sen' ile gerçek 'sen' ne kadar aynı kişi?", "Bir algoritma seni senden daha iyi tanıyabilir mi?",
+        "Bunun kimlik üzerine felsefi bir sonucu var mı?", "Karşıt görüşlü biri neleri savunurdu?",
+        "Bu durumu tersine çevirecek bir alışkanlık önerir misin?" ] },
+      { topic: "Sıkılmanın Kaybolması", sub: "The Extinction of Boredom", questions: [
+        "Sürekli uyarılmış bir zihin hâlâ yaratıcı olabilir mi?", "Sıkılmak gerçekten bir sorun mu, yoksa bir ihtiyaç mı?",
+        "Karşıt görüşlü biri neleri savunurdu?", "Bu konunun eğitimle ilgisi nedir?", "Bu fikri 2 dakikada nasıl anlatırdın?" ] },
+      { topic: "Ölümsüzlüğün Sıkıcılığı", sub: "The Tedium of Immortality", questions: [
+        "Sonsuz bir hayat anlamlı olabilir mi, yoksa anlamın kaynağı sonluluk mu?", "Karşıt görüşlü biri neleri savunurdu?",
+        "Bu fikrin gündelik kararlarımıza etkisi ne olurdu?", "En güçlü karşı-argüman sence nedir?",
+        "Bu konuyu bir sanat eseriyle nasıl anlatırdın?" ] },
+      { topic: "Otantikliğin Pazarlanması", sub: "The Marketing of Authenticity", questions: [
+        "'Kendin ol' mesajı aslında bir tüketim biçimi mi?", "Karşıt görüşlü biri neleri savunurdu?",
+        "Bunun gençlik kültürüne etkisi nedir?", "Bu fikri 2 dakikada nasıl özetlersin?", "En güçlü karşı-argüman sence nedir?" ] },
+      { topic: "Sessizliğin Ekonomisi", sub: "The Economy of Silence", questions: [
+        "Neden artık sessizlik bir lüks hâline geldi?", "Karşıt görüşlü biri neleri savunurdu?",
+        "Bu durumun zihin sağlığıyla ilişkisi nedir?", "Bu fikri 2 dakikada nasıl anlatırdın?", "En güçlü karşı-argüman sence nedir?" ] }
+    ],
+    en: [
+      { topic: "The Simulation Argument", sub: "Ad Infinitum", questions: [
+        "How would you explain this to a stranger in two minutes?", "What would someone who disagrees argue?",
+        "What's a real, everyday consequence of this idea?", "What's the strongest counter-argument you can think of?",
+        "How might this be debated 50 years from now?" ] },
+      { topic: "The Algorithmic Self", sub: "Persona Digitalis", questions: [
+        "How much is your online 'self' really you?", "Could an algorithm know you better than you know yourself?",
+        "What does this mean philosophically for identity?", "What would someone who disagrees argue?",
+        "What habit could help reverse this trend?" ] },
+      { topic: "The Extinction of Boredom", sub: "Otium Perditum", questions: [
+        "Can a constantly stimulated mind still be creative?", "Is boredom actually a problem, or a need?",
+        "What would someone who disagrees argue?", "How does this relate to education?", "How would you explain this in two minutes?" ] },
+      { topic: "The Tedium of Immortality", sub: "Vita Aeterna", questions: [
+        "Can an infinite life be meaningful, or does meaning require an ending?", "What would someone who disagrees argue?",
+        "How would this affect our everyday decisions?", "What's the strongest counter-argument?", "How would you illustrate this with a work of art?" ] },
+      { topic: "The Marketing of Authenticity", sub: "Persona Vendibilis", questions: [
+        "Is 'just be yourself' secretly a form of consumption?", "What would someone who disagrees argue?",
+        "How does this affect youth culture?", "How would you summarize this in two minutes?", "What's the strongest counter-argument?" ] },
+      { topic: "The Economy of Silence", sub: "Silentium Pretiosum", questions: [
+        "Why has silence quietly become a luxury good?", "What would someone who disagrees argue?",
+        "How does this relate to mental health?", "How would you explain this in two minutes?", "What's the strongest counter-argument?" ] }
+    ]
+  };
+
+  // Oturum hafızası (localStorage KULLANILMIYOR — sadece RAM'de tutulur)
+  let usedTopicsHistory = [];
+  const pushUsedTopic = (topicText) => {
+    if (!topicText) return;
+    usedTopicsHistory.push(topicText);
+    if (usedTopicsHistory.length > 8) usedTopicsHistory.shift();
+  };
+
+  // Küçük önbellek: bir konu gösterilirken arka planda sıradaki konu
+  // sessizce hazırlanır.
+  let topicCache = [];
+  let topicCacheKey = null;
+  let isPrefetching = false;
+  const cacheKeyFor = () => `${currentLang}:${secilenKategori}`;
+
+  // Client-taraflı kaba hız sınırlayıcı
+  let requestTimestamps = [];
+  const canMakeLiveRequest = () => {
+    if (!hasApiKey()) return false;
+    const now = Date.now();
+    requestTimestamps = requestTimestamps.filter(ts => now - ts < REQUEST_WINDOW_MS);
+    return requestTimestamps.length < MAX_REQUESTS_PER_WINDOW;
+  };
+
+  const sleep = (ms) => new Promise(res => setTimeout(res, ms));
+
+  const buildPrompt = (lang, categoryObj, avoidList) => {
+    const category = categoryObj || CATEGORIES[0];
+    if (lang === 'en') {
+      const categoryHint = (category.key !== 'rastgele')
+        ? `Focus specifically on the "${category.promptEn}" field.`
+        : `Freely choose from fields like philosophy, technology ethics, sociology, psychology, political philosophy, art theory, or history of science.`;
+      const avoidHint = avoidList.length
+        ? `These topics were ALREADY used in this session — do NOT repeat them or anything very similar: ${avoidList.join(" | ")}.`
+        : "";
+      return {
+        system: `You are a sharp, deep-thinking, contemporary moderator for postmodern discussions. Your task is to generate ONE extremely specific and original DISCUSSION TOPIC at the intersection of philosophy, sociology, technology, psychology, and politics.
+
+${categoryHint}
+${avoidHint}
+Each topic must be completely different from previous ones and unexpected. Avoid overused, cliché topics as much as possible; find a rarer, more striking, current angle.
+
+Also generate between 8 and 15 thought-provoking questions ("questions") about this exact topic that make someone think on their feet.
+
+Return ONLY the following JSON format, with no other explanation, preamble, or closing text:
+{"topic": "The topic name in English", "sub": "A short evocative subtitle (may be in Latin, French, or another language)", "questions": ["Question 1", "Question 2", "..."]}`,
+        user: `Generate a new, original discussion topic not used yet. (request id: ${Date.now()}-${Math.random().toString(36).slice(2, 9)}, do not repeat previous topics)`
+      };
+    }
+    const categoryHint = (category.key !== 'rastgele')
+      ? `Özellikle "${category.promptTr}" alanından bir konu üret.`
+      : `Felsefe, teknoloji etiği, sosyoloji, psikoloji, siyaset felsefesi, sanat teorisi veya bilim tarihi gibi alanlardan herhangi birini serbestçe seçebilirsin.`;
+    const avoidHint = avoidList.length
+      ? `Bu oturumda DAHA ÖNCE şu konular üretildi, bunları ve bunlara çok benzer konuları KESİNLİKLE tekrar üretme: ${avoidList.join(" | ")}.`
+      : "";
+    return {
+      system: `Sen zeki, derin düşünen, güncel bir postmodern tartışma moderatörüsün. Görevin felsefe, sosyoloji, teknoloji, psikoloji ve siyasetin kesişiminden ÇOK SPESİFİK ve ÖZGÜN, beyin yakan 1 adet TARTIŞMA KONUSU üretmek.
+
+${categoryHint}
+${avoidHint}
+Her üretimin bir öncekinden TAMAMEN FARKLI ve beklenmedik olmalı. Klişeleşmiş, çok sık karşılaşılan konulardan mümkün olduğunca kaçın; daha nadir, çarpıcı ve güncel bir açı bul.
+
+Bu konuyla ilgili, insanın ayakları üstünde düşünmesini sağlayacak, birbirinden farklı 8 ile 15 arasında zorlayıcı soru ("questions") üret.
+
+Çıktını SADECE aşağıdaki JSON formatında ver, başka hiçbir açıklama, giriş veya kapanış metni ekleme:
+{"topic": "Ürettiğin konunun Türkçe adı", "sub": "Kısa, çarpıcı bir alt başlık (Latince, Fransızca veya İngilizce olabilir)", "questions": ["Soru 1", "Soru 2", "..."]}`,
+      user: `Yeni, özgün ve şu ana kadar üretilmemiş bir tartışma konusu üret. (istek kimliği: ${Date.now()}-${Math.random().toString(36).slice(2, 9)}, tekrar etme)`
+    };
+  };
+
+  const requestTopicOnce = async (temperature, categoryObj, lang) => {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
+    const prompt = buildPrompt(lang, categoryObj, usedTopicsHistory);
+
+    try {
+      requestTimestamps.push(Date.now());
+      // Sunucusuz kurulum: Groq isteği doğrudan tarayıcıdan, en üstteki
+      // GROQ_API_KEY ile atılıyor. Groq'un JSON API'si tarayıcıdan gelen
+      // CORS isteklerini kabul ediyor; ekstra bir proxy/sunucuya gerek yok.
+      const response = await fetch(GROQ_URL, {
+        method: "POST",
+        signal: controller.signal,
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${GROQ_API_KEY}`
+        },
+        body: JSON.stringify({
+          model: AI_MODEL,
+          response_format: { type: "json_object" },
+          temperature: temperature,
+          frequency_penalty: 0.4,
+          presence_penalty: 0.5,
+          messages: [
+            { role: "system", content: prompt.system },
+            { role: "user", content: prompt.user }
+          ]
+        })
+      });
+      clearTimeout(timeoutId);
+
+      if (!response.ok) {
+        const err = new Error(`HTTP_${response.status}`);
+        err.isRateLimited = response.status === 429;
+        throw err;
+      }
+      const data = await response.json();
+      if (!data.choices || !data.choices[0] || !data.choices[0].message) throw new Error("INVALID_RESPONSE_SHAPE");
+
+      const parsed = JSON.parse(data.choices[0].message.content);
+      if (!parsed.topic || !Array.isArray(parsed.questions) || parsed.questions.length < 3) throw new Error("MALFORMED_JSON");
+      return parsed;
+    } catch (err) {
+      clearTimeout(timeoutId);
+      throw err;
+    }
+  };
+
+  // Ana fonksiyon: retry + anti-tekrar + timeout + hız sınırı + sessiz yedek havuz içerir.
+  const fetchAIContent = async (categoryKey, lang) => {
+    const categoryObj = CATEGORIES.find(c => c.key === categoryKey) || CATEGORIES[0];
+    const requestLang = lang; // bu istek başlarken hangi dildeyiz, sabitle
+
+    if (canMakeLiveRequest()) {
+      for (let attempt = 0; attempt < MAX_ATTEMPTS; attempt++) {
+        try {
+          const temperature = 0.9 + attempt * 0.2;
+          const parsed = await requestTopicOnce(temperature, categoryObj, requestLang);
+          const isDuplicate = usedTopicsHistory.some(tp => tp.trim().toLowerCase() === parsed.topic.trim().toLowerCase());
+          if (isDuplicate && attempt < MAX_ATTEMPTS - 1) { continue; }
+          return { ...parsed, isLive: true, lang: requestLang };
+        } catch (err) {
+          console.error(`AI isteği ${attempt + 1}. denemede başarısız:`, err);
+          if (err && err.isRateLimited) break; // kota korumak için tekrar deneme
+          if (attempt < MAX_ATTEMPTS - 1) await sleep(350 * (attempt + 1));
+        }
+      }
+    }
+
+    // Sessiz, kullanıcıya hiç belli etmeden yedek havuzdan seç.
+    const langPool = FALLBACK_TOPICS[requestLang] || FALLBACK_TOPICS.tr;
+    let pool = langPool.filter(f => !usedTopicsHistory.some(tp => tp.trim().toLowerCase() === f.topic.trim().toLowerCase()));
+    if (pool.length === 0) pool = langPool;
+    const fallback = pool[Math.floor(Math.random() * pool.length)];
+    return { ...fallback, isLive: false, lang: requestLang };
+  };
+
+  const prefetchTopic = async () => {
+    if (isPrefetching || topicCache.length >= 1) return;
+    isPrefetching = true;
+    const keyAtStart = cacheKeyFor();
+    try {
+      const result = await fetchAIContent(secilenKategori, currentLang);
+      if (result.isLive && cacheKeyFor() === keyAtStart) topicCache.push(result);
+    } catch (e) { /* sessiz */ }
+    isPrefetching = false;
+  };
+
+  /* =========================================
+     UYGULAMA YÖNETİMİ
+  ========================================= */
+  const UI = {
+    appTitle: document.getElementById("app-title"),
+    badgeText: document.getElementById("badge-text"),
+    badgeTime: document.getElementById("badge-time"),
+    badgeTalk: document.getElementById("badge-talk"),
+    tMain: document.getElementById("topic-main"),
+    tSub: document.getElementById("topic-sub"),
+    lbl: document.getElementById("top-label"),
+    btnPrimary: document.getElementById("btn-primary"),
+    btnPrimaryTxt: document.getElementById("btn-primary-text"),
+    secActions: document.getElementById("secondary-actions"),
+    txtRespin: document.getElementById("txt-respin"),
+    txtReset: document.getElementById("txt-reset"),
+    timer: document.getElementById("timer-display"),
+    question: document.getElementById("question-display"),
+    footer: document.getElementById("footer-text"),
+    flash: document.getElementById("flash"),
+    toast: document.getElementById("toast"),
+    docTitle: document.getElementById("doc-title")
+  };
+
+  let ayarArastirmaDk = 15;
+  let ayarKonusmaSn = 120;
+  let secilenKategori = "rastgele";
+  let currentPhase = "IDLE";
+  let intervalTimer = null;
+  let spinTimeoutId = null;
+  let generatedQuestions = [];
+  let toastTimeoutId = null;
+  // Bu oturumda şu anda ekranda duran konu hangi dilde üretildi?
+  let activeTopicLang = null;
+
+  const formatTime = (secs) => `${String(Math.floor(secs / 60)).padStart(2, '0')}:${String(secs % 60).padStart(2, '0')}`;
+
+  const showToast = (msg, duration = 2200) => {
+    if (toastTimeoutId) clearTimeout(toastTimeoutId);
+    UI.toast.innerText = msg;
+    UI.toast.classList.add("show");
+    toastTimeoutId = setTimeout(() => UI.toast.classList.remove("show"), duration);
+  };
+
+  /* =========================================
+     IDLE EKRANI — SÜREKLİ DEĞİŞEN ANİMASYONLU BAŞLIK
+  ========================================= */
+  let idleWordTimer = null;
+  let idleWordIndex = 0;
+
+  const stopIdleAnimation = () => {
+    if (idleWordTimer) { clearInterval(idleWordTimer); idleWordTimer = null; }
+  };
+
+  const renderIdleAnimated = () => {
+    const s = t();
+    idleWordIndex = 0;
+    UI.tMain.innerHTML = `
+      <div class="idle-animated-wrap">
+        <span class="idle-eyebrow" id="idle-prefix">${s.idlePrefix}</span>
+        <span class="animated-span" id="idle-word">${s.idleWords[0]}</span>
+      </div>`;
+
+    stopIdleAnimation();
+    idleWordTimer = setInterval(() => {
+      const wordEl = document.getElementById('idle-word');
+      if (currentPhase !== "IDLE" || !wordEl) { stopIdleAnimation(); return; }
+      const words = t().idleWords;
+      idleWordIndex = (idleWordIndex + 1) % words.length;
+      wordEl.classList.add('word-swap');
+      setTimeout(() => {
+        const el = document.getElementById('idle-word');
+        if (!el) return;
+        el.textContent = words[idleWordIndex];
+        el.classList.remove('word-swap');
+      }, 350);
+    }, 2200);
+  };
+
+  const applyPhaseStrings = () => {
+    const s = t();
+    UI.appTitle.innerHTML = s.appNameHtml;
+    UI.badgeText.childNodes[0].nodeValue = `${s.badgePrefix} · `;
+    UI.badgeTime.nextSibling.nodeValue = ` ${s.badgeResearch(ayarArastirmaDk).replace(/^\d+\s*/, '')} · `;
+    UI.badgeTalk.nextSibling.nodeValue = ` ${s.badgeTalk(Math.round(ayarKonusmaSn / 60)).replace(/^\d+\s*/, '')}`;
+    UI.docTitle.innerText = s.docTitle;
+    document.title = s.docTitle;
+    UI.txtRespin.innerText = s.respin;
+    UI.txtReset.innerText = s.reset;
+
+    if (currentPhase === "IDLE") {
+      renderIdleAnimated();
+      UI.tSub.innerText = " ";
+      UI.lbl.innerText = "";
+      UI.btnPrimaryTxt.innerText = s.btnGenerate;
+      UI.footer.innerText = s.footerIdle;
+    } else {
+      stopIdleAnimation();
+    }
+
+    if (currentPhase === "SPINNING") {
+      UI.lbl.innerText = s.labelSpinning;
+      UI.btnPrimaryTxt.innerText = s.btnSpinning;
+      UI.footer.innerText = s.footerSpinning;
+    } else if (currentPhase === "READY") {
+      UI.lbl.innerText = s.labelReady;
+      UI.btnPrimaryTxt.innerText = s.btnResearch;
+      UI.footer.innerText = s.footerReady(ayarArastirmaDk);
+    } else if (currentPhase === "RESEARCHING") {
+      UI.lbl.innerText = s.labelResearch;
+      UI.btnPrimaryTxt.innerText = s.btnSkipResearch;
+      UI.footer.innerText = s.footerResearch;
+    } else if (currentPhase === "TALKING") {
+      UI.lbl.innerText = s.labelTalk;
+      UI.btnPrimaryTxt.innerText = s.btnFinish;
+      UI.footer.innerText = s.footerTalk;
+    } else if (currentPhase === "DONE") {
+      UI.lbl.innerText = s.labelDone;
+      UI.tMain.innerText = s.doneTopic;
+      UI.tSub.innerText = s.doneSub;
+      UI.footer.innerText = s.footerDone;
+      UI.btnPrimaryTxt.innerText = s.btnNewTopic;
+    }
+  };
+
+  // Rulet Döndürme Aşaması — EN AZ 5 SANİYE, gerçek bir çark gibi sona doğru yavaşlar.
+  const spinRoulette = async () => {
+    if (currentPhase === "SPINNING") return;
+    stopIdleAnimation();
+    currentPhase = "SPINNING";
+    activeTopicLang = null;
+    playTone('click');
+    isGoing = true;
+
+    const s = t();
+    UI.secActions.classList.add("hidden");
+    UI.timer.style.display = "none"; UI.question.style.display = "none";
+    UI.tMain.style.display = "flex"; UI.tSub.style.display = "block";
+    UI.lbl.innerText = s.labelSpinning;
+    UI.footer.innerText = s.footerSpinning;
+    UI.btnPrimary.classList.add("active");
+    UI.btnPrimaryTxt.innerText = s.btnSpinning;
+
+    const spinStart = Date.now();
+    const tickSpin = () => {
+      const elapsed = Date.now() - spinStart;
+      if (elapsed >= MIN_SPIN_MS + 400) return;
+      playTone('tick');
+      const liveWords = t().spinWords;
+      UI.tMain.innerText = liveWords[Math.floor(Math.random() * liveWords.length)];
+      UI.tMain.classList.remove('spin-tick');
+      void UI.tMain.offsetWidth;
+      UI.tMain.classList.add('spin-tick');
+      const progress = Math.min(elapsed / MIN_SPIN_MS, 1);
+      const delay = 70 + Math.pow(progress, 3) * 300; // sona doğru yavaşla
+      spinTimeoutId = setTimeout(tickSpin, delay);
+    };
+    tickSpin();
+
+    // Önbellekte hazır bir konu varsa onu kullan, yoksa canlı iste.
+    const minSpinPromise = sleep(MIN_SPIN_MS);
+    const cached = (topicCache.length && cacheKeyFor() === topicCacheKey) ? topicCache.shift() : null;
+    const dataPromise = cached ? Promise.resolve(cached) : fetchAIContent(secilenKategori, currentLang);
+    const [data] = await Promise.all([dataPromise, minSpinPromise]);
+
+    if (spinTimeoutId) clearTimeout(spinTimeoutId);
+    playTone('success');
+
+    // Kullanıcı spin sürerken dili değiştirdiyse elimizdeki konu eski dilde
+    // gelmiş olabilir; sessizce yeni dilde bir konu daha isteyip onu gösteriyoruz.
+    let finalData = data;
+    if (data.lang && data.lang !== currentLang) {
+      try {
+        finalData = await fetchAIContent(secilenKategori, currentLang);
+      } catch (e) {
+        finalData = data;
+      }
+    }
+
+    UI.flash.classList.remove("flash-anim");
+    void UI.flash.offsetWidth;
+    UI.flash.classList.add("flash-anim");
+
+    UI.tMain.classList.remove("reveal");
+    void UI.tMain.offsetWidth;
+    UI.tMain.innerText = finalData.topic;
+    UI.tMain.classList.add("reveal");
+
+    UI.tSub.classList.remove("reveal-soft");
+    void UI.tSub.offsetWidth;
+    UI.tSub.innerText = finalData.sub;
+    UI.tSub.classList.add("reveal-soft");
+
+    generatedQuestions = finalData.questions;
+    pushUsedTopic(finalData.topic);
+    activeTopicLang = currentLang;
+
+    currentPhase = "READY";
+    isGoing = false;
+    UI.btnPrimary.classList.remove("active");
+    applyPhaseStrings();
+    UI.secActions.classList.remove("hidden");
+
+    topicCacheKey = cacheKeyFor();
+    setTimeout(prefetchTopic, 1500);
+  };
+
+  const startPhase = (durationSecs, phaseName) => {
+    currentPhase = phaseName;
+    let remain = durationSecs;
+    const s = t();
+
+    UI.secActions.classList.add("hidden");
+    UI.timer.style.display = "block";
+    UI.timer.innerText = formatTime(remain);
+    UI.timer.classList.remove("reveal-soft"); void UI.timer.offsetWidth; UI.timer.classList.add("reveal-soft");
+
+    isGoing = true;
+
+    if (phaseName === "RESEARCHING") {
+      playTone('click');
+      UI.tMain.style.display = "none"; UI.tSub.style.display = "none";
+      applyPhaseStrings();
+    } else if (phaseName === "TALKING") {
+      playTone('alert');
+      applyPhaseStrings();
+      UI.question.style.display = "block";
+      const randomQ = generatedQuestions[Math.floor(Math.random() * (generatedQuestions.length || 1))] || (currentLang === 'en' ? "What's your core thesis on this?" : "Bu konuda temel tezin nedir?");
+      UI.question.innerHTML = `<span class="q-eyebrow">${t().questionEyebrow}</span>"${randomQ}"`;
+      UI.question.classList.remove("reveal-soft"); void UI.question.offsetWidth; UI.question.classList.add("reveal-soft");
+    }
+
+    intervalTimer = setInterval(() => {
+      remain--;
+      UI.timer.innerText = formatTime(remain);
+      if (remain <= 0) { clearInterval(intervalTimer); nextStep(); }
+    }, 1000);
+  };
+
+  const nextStep = () => {
+    if (intervalTimer) clearInterval(intervalTimer);
+
+    if (currentPhase === "IDLE" || currentPhase === "READY") {
+      if (currentPhase === "IDLE") spinRoulette();
+      else startPhase(ayarArastirmaDk * 60, "RESEARCHING");
+    } else if (currentPhase === "RESEARCHING") {
+      startPhase(ayarKonusmaSn, "TALKING");
+    } else if (currentPhase === "TALKING" || currentPhase === "DONE") {
+      playTone('success');
+      currentPhase = "IDLE";
+      isGoing = false;
+      UI.timer.style.display = "none"; UI.question.style.display = "none";
+      UI.tMain.style.display = "flex"; UI.tSub.style.display = "block";
+      currentPhase = "DONE";
+      activeTopicLang = null;
+      applyPhaseStrings();
+      currentPhase = "IDLE"; // bir sonraki tıklamada yeni dönüş başlasın
+    }
+  };
+
+  UI.btnPrimary.addEventListener("click", nextStep);
+  document.getElementById("btn-respin").addEventListener("click", spinRoulette);
+  document.getElementById("btn-reset").addEventListener("click", () => {
+    playTone('click');
+    if (spinTimeoutId) clearTimeout(spinTimeoutId);
+    if (intervalTimer) clearInterval(intervalTimer);
+    currentPhase = "IDLE"; isGoing = false;
+    activeTopicLang = null;
+    UI.tMain.style.display = "flex"; UI.tSub.style.display = "block";
+    UI.timer.style.display = "none"; UI.question.style.display = "none";
+    UI.secActions.classList.add("hidden");
+    applyPhaseStrings();
+  });
+
+  /* =========================================
+     AYARLAR MENÜSÜ + DİL KONTROLLERİ
+  ========================================= */
+  const modal = document.getElementById('settings-modal');
+  const inputTime = document.getElementById('setting-time');
+  const inputTalk = document.getElementById('setting-talk');
+  const selectCategory = document.getElementById('setting-category');
+  const langToggleBtns = document.querySelectorAll('.lang-btn');
+  const langQuick = document.getElementById('lang-quick');
+
+  const populateCategorySelect = () => {
+    selectCategory.innerHTML = "";
+    CATEGORIES.forEach(cat => {
+      const opt = document.createElement('option');
+      opt.value = cat.key;
+      opt.innerText = currentLang === 'en' ? cat.en : cat.tr;
+      if (cat.key === secilenKategori) opt.selected = true;
+      selectCategory.appendChild(opt);
+    });
+  };
+
+  const applyModalStrings = () => {
+    const s = t();
+    document.getElementById('settings-title').innerText = s.settingsTitle;
+    document.getElementById('lbl-lang').innerText = s.settingsLang;
+    document.getElementById('lbl-research').innerText = s.settingsResearch;
+    document.getElementById('lbl-talk').innerText = s.settingsTalk;
+    document.getElementById('lbl-category').innerText = s.settingsCategory;
+    document.getElementById('lbl-category-hint').innerText = s.settingsCategoryHint;
+    document.getElementById('settings-close').innerText = s.settingsSave;
+    populateCategorySelect();
+  };
+
+  const setLanguage = (lang, { silent = false } = {}) => {
+    if (lang === currentLang) return;
+
+    if (currentPhase === "SPINNING") {
+      showToast(t().toastLangLockedSpin);
+      langToggleBtns.forEach(b => b.classList.toggle('active', b.dataset.lang === currentLang));
+      langQuick.innerText = currentLang.toUpperCase();
+      return;
+    }
+
+    const hadMismatchedTopic = activeTopicLang && activeTopicLang !== lang;
+
+    currentLang = lang;
+    langQuick.innerText = lang.toUpperCase();
+    langToggleBtns.forEach(b => b.classList.toggle('active', b.dataset.lang === lang));
+    topicCache = []; topicCacheKey = null;
+
+    if (hadMismatchedTopic) {
+      if (spinTimeoutId) clearTimeout(spinTimeoutId);
+      if (intervalTimer) clearInterval(intervalTimer);
+      currentPhase = "IDLE";
+      isGoing = false;
+      activeTopicLang = null;
+      UI.tMain.style.display = "flex"; UI.tSub.style.display = "block";
+      UI.timer.style.display = "none"; UI.question.style.display = "none";
+      UI.secActions.classList.add("hidden");
+      applyPhaseStrings();
+      applyModalStrings();
+      if (!silent) showToast(t().toastLangResetSession, 2000);
+      return;
+    }
+
+    applyPhaseStrings();
+    applyModalStrings();
+    if (!silent) showToast(t().toastLang);
+  };
+
+  langToggleBtns.forEach(btn => {
+    btn.addEventListener('click', () => { playTone('click'); setLanguage(btn.dataset.lang); });
+  });
+  langQuick.addEventListener('click', () => {
+    playTone('click');
+    setLanguage(currentLang === 'tr' ? 'en' : 'tr');
+  });
+
+  document.getElementById('settings-open').addEventListener('click', () => {
+    playTone('click'); applyModalStrings(); modal.classList.add('show');
+  });
+
+  const closeSettings = () => {
+    playTone('click'); modal.classList.remove('show');
+    const newTime = parseInt(inputTime.value);
+    if (newTime && newTime > 0) ayarArastirmaDk = newTime;
+    const newTalk = parseInt(inputTalk.value);
+    if (newTalk && newTalk > 0) ayarKonusmaSn = newTalk * 60;
+    const newCategory = selectCategory.value;
+    if (newCategory !== secilenKategori) { secilenKategori = newCategory; topicCache = []; topicCacheKey = null; }
+    UI.badgeTime.innerText = ayarArastirmaDk;
+    UI.badgeTalk.innerText = Math.round(ayarKonusmaSn / 60);
+    applyPhaseStrings();
+  };
+
+  document.getElementById('settings-close').addEventListener('click', closeSettings);
+  modal.addEventListener('click', (e) => { if (e.target === modal) { playTone('click'); modal.classList.remove('show'); } });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && modal.classList.contains('show')) { playTone('click'); modal.classList.remove('show'); }
+  });
+
+  /* =========================================
+     BAŞLANGIÇ
+  ========================================= */
+  populateCategorySelect();
+  applyPhaseStrings();
+})();
+  </script>
+</body>
+</html>
